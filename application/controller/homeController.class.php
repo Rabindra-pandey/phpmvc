@@ -1,15 +1,13 @@
 <?php
 
-require_once(APPS_PATH.'/application/model/homeModel.class.php');
-require_once(APPS_PATH.'/core/controller.class.php');
-
 class homeController extends Controller{
 
 	private $model;
 	
 	function __construct(){	
-		//parent::__construct();
-		$this->model = new homeModel();	
+		parent::__construct();
+		$this->model = $this->load->model('homeModel');
+		
 		$getSess = $this->isLoggedIn('userdata');
 		if(empty($getSess)){
 			header('Location: '.APPS_URL.'login'); exit;
@@ -237,13 +235,13 @@ class homeController extends Controller{
 	function getSelectedQuarterDate($curMonth, $curYrs, $prevYrs) {
 		$quarter = '';
 		if($curMonth>=1 && $curMonth<=3){
-			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$prevYrs.' To 30-06-'.$prevYrs.')", "year": "Previous Year"}, {"date": "Q3 (01-07-'.$prevYrs.' To 30-09-'.$prevYrs.')", "year": "Previous Year"}, {"date": "Q4 (01-09-'.$prevYrs.' To 31-12-'.$prevYrs.')", "year": "Previous Year"}]';
+			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$prevYrs.' To 30-06-'.$prevYrs.')", "year": "Previous Year"}, {"date": "Q3 (01-07-'.$prevYrs.' To 30-09-'.$prevYrs.')", "year": "Previous Year"}, {"date": "Q4 (01-10-'.$prevYrs.' To 31-12-'.$prevYrs.')", "year": "Previous Year"}]';
 		}else if($curMonth>=4 && $curMonth<=6){
-			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$curYrs.' To 30-06-'.$curYrs.')", "year": "Current Year"}, {"date": "Q3 (01-07-'.$prevYrs.' To 30-09-'.$prevYrs.')", "year": "Previous Year"}, {"date": "Q4 (01-09-'.$prevYrs.' To 31-12-'.$prevYrs.')", "year": "Previous Year"}]';
+			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$curYrs.' To 30-06-'.$curYrs.')", "year": "Current Year"}, {"date": "Q3 (01-07-'.$prevYrs.' To 30-09-'.$prevYrs.')", "year": "Previous Year"}, {"date": "Q4 (01-10-'.$prevYrs.' To 31-12-'.$prevYrs.')", "year": "Previous Year"}]';
 		}else if($curMonth>=7 && $curMonth<=9){
-			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$curYrs.' To 30-06-'.$curYrs.')", "year": "Current Year"}, {"date": "Q3 (01-07-'.$curYrs.' To 30-09-'.$curYrs.')", "year": "Current Year"}, {"date": "Q4 (01-09-'.$prevYrs.' To 31-12-'.$prevYrs.')", "year": "Previous Year"}]';
+			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$curYrs.' To 30-06-'.$curYrs.')", "year": "Current Year"}, {"date": "Q3 (01-07-'.$curYrs.' To 30-09-'.$curYrs.')", "year": "Current Year"}, {"date": "Q4 (01-10-'.$prevYrs.' To 31-12-'.$prevYrs.')", "year": "Previous Year"}]';
 		}else if($curMonth>=9 && $curMonth<=12){
-			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$curYrs.' To 30-06-'.$curYrs.')", "year": "Current Year"}, {"date": "Q3 (01-07-'.$curYrs.' To 30-09-'.$curYrs.')", "year": "Current Year"}, {"date": "Q4 (01-09-'.$curYrs.' To 31-12-'.$curYrs.')", "year": "Current Year"}]';
+			$quarter = '[{"date": "Q1 (01-01-'.$curYrs.' To 31-03-'.$curYrs.')", "year": "Current Year"}, {"date": "Q2 (01-04-'.$curYrs.' To 30-06-'.$curYrs.')", "year": "Current Year"}, {"date": "Q3 (01-07-'.$curYrs.' To 30-09-'.$curYrs.')", "year": "Current Year"}, {"date": "Q4 (01-10-'.$curYrs.' To 31-12-'.$curYrs.')", "year": "Current Year"}]';
 		}
 		return $quarter;
 	}

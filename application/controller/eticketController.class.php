@@ -1,15 +1,12 @@
 <?php
 
-require_once(APPS_PATH.'/application/model/homeModel.class.php');
-require_once(APPS_PATH.'/core/controller.class.php');
-
-
 class eticketController extends Controller{
 
 	private $model;
 	
 	function __construct(){	
-		$this->model = new homeModel();
+		parent::__construct();
+		$this->model = $this->load->model('homeModel');
 		
 		$getSess = $this->isLoggedIn('userdata');
 		if(empty($getSess)){
@@ -103,7 +100,7 @@ class eticketController extends Controller{
 				header('Location: '.APPS_URL.'eticket/?error=Something is wrong. Please try again.'); exit;
 			}
 		}else if($editId=='newticketentry' && $resourceAllocId!=''){
-			$sql = "SELECT `ra`.`employee_id` AS designer_id,`ra`.`eform_ticket` AS ticket_no, CONCAT_WS(' ', `em`.`first_name`, `em`.`last_name`) AS designer_name,`em`.`channel`,`em`.`team` AS region FROM `resource_allocation` AS ra LEFT JOIN `employee` AS em ON `ra`.`employee_id`=`em`.`employee_id` WHERE `ra`.`resource_allocation_id`=$resourceAllocId";
+			$sql = "SELECT `ra`.`employee_id` AS designer_id,`ra`.`eform_ticket` AS ticket_no,`ra`.`end_date` AS job_received_date, CONCAT_WS(' ', `em`.`first_name`, `em`.`last_name`) AS designer_name,`em`.`channel`,`em`.`team` AS region FROM `resource_allocation` AS ra LEFT JOIN `employee` AS em ON `ra`.`employee_id`=`em`.`employee_id` WHERE `ra`.`resource_allocation_id`=$resourceAllocId";
 		
 			$data['edit'] = $this->model->selectSingleRecordFromPLI($sql);
 			$data['resource_alloc_id'] = $resourceAllocId;
@@ -243,7 +240,7 @@ class eticketController extends Controller{
 			$data['querystring']['val'] = $getVal['val'];
 		}
 		
-		$selSql = "SELECT `id`, `ticket_no`,`country`,`region`,`channel`,`draft_no`,`complexity`,`job_received_date`,`job_status`,`annotated_pages`,`qc_page_count`,`designer_name`,`qa_name`,`job_delivery_date` FROM `ticket_information` WHERE (`job_status`='Open' OR `job_status`='Recheck' OR `job_status`='WIP') AND (`job_received_date`>='$startDate' AND `job_received_date`<='$endDate') AND `status`='A' ORDER BY `job_received_date` DESC"; // BETWEEN NOW() - INTERVAL 30 DAY AND NOW()
+		$selSql = "SELECT `id`, `ticket_no`,`country`,`region`,`channel`,`draft_no`,`complexity`,`job_received_date`,`job_status`,`annotated_pages`,`qc_page_count`,`designer_name`,`qa_name`,`job_delivery_date` FROM `ticket_information` WHERE (`job_status`='' OR `job_status`='Open' OR `job_status`='Recheck' OR `job_status`='WIP') AND `status`='A' ORDER BY `job_received_date` DESC"; // AND (`job_received_date`>='$startDate' AND `job_received_date`<='$endDate')  || BETWEEN NOW() - INTERVAL 30 DAY AND NOW()
 		$getRows = $this->model->selectAllRecordsFromCalculator($selSql);
 		$data['lists'] = $getRows;		
 		//$this->pr($data['lists'], true);
@@ -274,8 +271,7 @@ class eticketController extends Controller{
 		$sql = "SELECT `ra`.`resource_allocation_id`,`ra`.`employee_id`,`ra`.`eform_ticket`,`ra`.`end_date`,CONCAT_WS(' ', `em`.`first_name`, `em`.`last_name`) AS emp_name,`em`.`channel`,`em`.`team` AS region FROM `resource_allocation` AS ra LEFT JOIN `employee` AS em ON `ra`.`employee_id`=`em`.`employee_id` WHERE `ra`.`allocation_status`='completed' AND `ra`.`flag_active`=1 AND `ra`.`pli_calc_flag`='CM' ORDER BY `ra`.`end_date` DESC";
 		
 		$data['lists'] = $this->model->selectAllRecordsFromPLI($sql);
-		//$this->pr($data['lists'], true);
-		
+		//$this->pr($data['lists'], true);		
 		$this->view('eticket/ticketfromdesigner', $data);
 	}
 
@@ -338,6 +334,18 @@ class eticketController extends Controller{
 		$getRows = $this->model->selectAllRecordsFromCalculator($selSql);
 		$data['lists'] = $getRows;		
 		$this->view('eticket/rejectedticket', $data);
+	}
+	
+	function checkingyicketinfo(){
+		$ticketNo = $_POST['ticketno'];
+		
+		$selSql = "SELECT `id` FROM `ticket_information` WHERE `ticket_no` LIKE '$ticketNo%' AND `status`='A'";		
+		$getRows = $this->model->selectAllRecordsFromCalculator($selSql);
+		if($getRows){
+			echo 1;
+		}else{
+			echo 0;
+		}
 	}
 }
 

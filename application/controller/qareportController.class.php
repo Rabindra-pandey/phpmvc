@@ -1,7 +1,4 @@
 <?php
-
-require_once(APPS_PATH.'/application/model/homeModel.class.php');
-require_once(APPS_PATH.'/core/controller.class.php');
 		
 require(APPS_PATH.'/application/third_party/spreadsheet/vendor/autoload.php');
 //include the classes needed to create and write .xlsx file
@@ -14,7 +11,8 @@ class qareportController extends Controller{
 	private $model;
 	
 	function __construct(){	
-		$this->model = new homeModel();
+		parent::__construct();
+		$this->model = $this->load->model('homeModel');
 		
 		$getSess = $this->isLoggedIn('userdata');
 		if(empty($getSess)){

@@ -1,15 +1,12 @@
 <?php
 
-require_once(APPS_PATH.'/application/model/homeModel.class.php');
-require_once(APPS_PATH.'/core/controller.class.php');
-
 class loginController extends Controller{
 
 	private $model;
 	
 	function __construct(){	
-		//parent::__construct();
-		$this->model = new homeModel();		
+		parent::__construct();
+		$this->model = $this->load->model('homeModel');
 	}
 
 	function index(){
