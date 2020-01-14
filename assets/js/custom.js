@@ -148,28 +148,70 @@
 		}
 	} 
 
-	function checkValidationOfEticket(){
+	function pmformchecking(ticketno){
+		var appUrl = $('#app_url').val();
+		var tmp = 0;
+		$.ajax({
+			'async': false,
+			'type': "POST",
+			'global': false,
+			'url': appUrl+"eticket/checkingyicketinfo",
+			'data': {'ticketno': ticketno},
+			'success': function(data){
+				tmp = data;
+			}
+		});
+		return tmp;
+	}
+
+	function  checkValidationOfEticket(){
+		var userRole = $('#user_role').val();
 		var formData = $('form#eticketform').serializeArray();
-		
-		checkingFieldValueBlank(formData, "eticket[ticket_no]");
-		checkingFieldValueBlank(formData, "eticket[country]");
-		checkingFieldValueBlank(formData, "eticket[designer_id]", "select");
-		checkingFieldValueBlank(formData, "eticket[qa_id]", "select");
-		checkingFieldValueBlank(formData, "eticket[region]");
-		checkingFieldValueBlank(formData, "eticket[channel]");
-		checkingFieldValueBlank(formData, "eticket[job_type]", "select");
-		checkingFieldValueBlank(formData, "eticket[draft_no]", "select");
-		checkingFieldValueBlank(formData, "eticket[complexity]", "select");
-		checkingFieldValueBlank(formData, "eticket[total_pages]");
-		checkingFieldValueBlank(formData, "eticket[annotated_pages]");
-		checkingFieldValueBlank(formData, "eticket[job_status]");
-		checkingFieldValueBlank(formData, "eticket[job_delivery_date]");
-		
+
 		var ticketno = $('#ticket_no').val();
 		var jobstatus = $('#status').val();
 		var draftno = $('#draft_no').val();
 		var editedId = $('#editedId').val();
 		var rejectedId = $('#rejectedId').val();
+		var appUrl = $('#app_url').val();
+
+		if(userRole==2){
+			checkingFieldValueBlank(formData, "eticket[ticket_no]");
+			checkingFieldValueBlank(formData, "eticket[country]");
+			checkingFieldValueBlank(formData, "eticket[designer_id]", "select");
+			checkingFieldValueBlank(formData, "eticket[qa_id]", "select");
+			checkingFieldValueBlank(formData, "eticket[job_delivery_date]");
+			
+			if(editedId==''){
+				var returnVal = 0;
+				if(ticketno!=''){
+					returnVal = pmformchecking(ticketno);
+				}
+				if(returnVal==1){
+					if(confirm('Do you want to proceed to save the ticket')){
+					}else{					
+						$('[name="eticket[ticket_no]"]').addClass('error');
+						return false;
+					}
+				}
+			}
+		}
+		if(userRole==3){		
+			checkingFieldValueBlank(formData, "eticket[ticket_no]");
+			checkingFieldValueBlank(formData, "eticket[country]");
+			checkingFieldValueBlank(formData, "eticket[designer_id]", "select");
+			checkingFieldValueBlank(formData, "eticket[qa_id]", "select");
+			checkingFieldValueBlank(formData, "eticket[region]");
+			checkingFieldValueBlank(formData, "eticket[channel]");
+			checkingFieldValueBlank(formData, "eticket[job_type]", "select");
+			checkingFieldValueBlank(formData, "eticket[draft_no]", "select");
+			checkingFieldValueBlank(formData, "eticket[complexity]", "select");
+			checkingFieldValueBlank(formData, "eticket[total_pages]");
+			checkingFieldValueBlank(formData, "eticket[annotated_pages]");
+			checkingFieldValueBlank(formData, "eticket[job_status]");
+			checkingFieldValueBlank(formData, "eticket[job_delivery_date]");
+		}
+
 		if(ticketno!='' && jobstatus!='' && draftno!='' && editedId==''){
 			checkTicketStatus(ticketno, jobstatus, draftno);
 		}
@@ -178,7 +220,7 @@
 			checkingFieldValueBlank(formData, "eticket[escalation_type]");
 		}	
 		var checkTrue = true;
-		if(rejectedId!=''){
+		if(rejectedId!='' && userRole==2){
 			if(jobstatus!='Recheck'){
 				alert("Please select status as 'Recheck'.");
 				checkTrue = false;
@@ -193,8 +235,7 @@
 			if($(this).hasClass('error')){
 				checkTrue = false;
 			}
-		});
-		
+		});		
 		if(checkTrue==false){
 			return false;
 		}else{
