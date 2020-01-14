@@ -3,9 +3,10 @@
 class Controller{
 
 	public $data = [];
+	public $load;
 	
 	function __construct(){	
-
+		$this->load = init();		
 	}
 
 	public function view($view, $data=[], $header=true){		
