@@ -3,11 +3,8 @@
 require_once(APPS_PATH."/core/model.class.php");
 
 class homeModel extends Model{
-	/* For Skill assesment tool */
 	private $db_sat; 
-	/* For Resource allocator tool */
 	private $db_lams;
-	/* For PLI calculator tool */
 	private $db_calc;
 	
 	function __construct(){	
