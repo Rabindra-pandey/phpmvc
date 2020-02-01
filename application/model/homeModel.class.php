@@ -1,7 +1,5 @@
 <?php
 
-require_once(APPS_PATH."/core/model.class.php");
-
 class homeModel extends Model{
 	private $db_sat; 
 	private $db_lams;
