@@ -1,5 +1,8 @@
 <?php
+	$application_environment = 'DEV';
+
 	define('APPS_PATH', dirname(__FILE__));	
+	define('SITE_ENV', $application_environment);
 
 	if(SITE_ENV=="DEV"){
 		ini_set('display_errors', 1);
