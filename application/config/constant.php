@@ -4,12 +4,12 @@
 define("DB_HOST","localhost");
 define("DB_USER","root");
 define("DB_PASS","");
-define("DB_NAME","assesmenttesting");
-define("DB_NAME_SAT","assesmenttesting");
+define("DB_NAME","demo1");
+define("DB_NAME_SAT","demo2");
 define("DB_NAME_LAMS","pli");
-define("DB_NAME_CALC","pli_calculator");
+define("DB_NAME_CALC","demo3");
 
-define('APPS_URL', 'http://localhost:8080/rabindra/PLI_Calculator/');
+define('APPS_URL', 'http://localhost:8080/rabindra/pli_calculator/');
 
 
 $status = array('Open', 'WIP', 'Approved', 'Not Approved', 'Recheck');
