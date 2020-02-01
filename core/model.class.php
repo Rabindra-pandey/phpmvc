@@ -1,7 +1,5 @@
 <?php
 
-include_once(APPS_PATH."/application/config/session.php");
-
 class Model{
 
 	private $conn;
